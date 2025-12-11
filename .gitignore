@@ -1,0 +1,22 @@
+logs/
+__pycache__/
+.DS_Store
+.ideacache
+*.ipynb
+.idea
+test.py
+#dev
+# pixi environments
+.pixi
+*.egg-info
+data/*
+!data/accounts_settings.py
+!data/input/
+!data/run_utils_input/
+venv/
+.venv/
+/src/data/accounts.db
+/.update_backups/
+# pixi environments
+.pixi/*
+!.pixi/config.toml

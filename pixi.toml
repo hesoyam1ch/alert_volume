@@ -1,0 +1,14 @@
+[workspace]
+authors = ["hesoyam1ch <unheeded14@gmail.com>"]
+channels = ["conda-forge"]
+name = "alert_volume"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
+python = "3.13.*"
+
+sqlalchemy = ">=2.0.44,<3"
+python-telegram-bot = ">=22.5,<23"
