@@ -21,10 +21,10 @@ async def run_worker():
                                        chat_id = TELEGRAM_CHAT_ID)
 
 
-    # monitor_service = MonitorService(db_client = db_client,
-    #                                  order_book_service = order_book_service,
-    #                                  volume_deviation_detector = volume_deviation_detector,
-    #                                  telegram_service = telegram_service)
+    monitor_service = MonitorService(db_client = db_client,
+                                     order_book_service = order_book_service,
+                                     volume_deviation_detector = volume_deviation_detector,
+                                     telegram_service = telegram_service)
 
     mexc_service = MexcService(
         order_book_service = order_book_service,
