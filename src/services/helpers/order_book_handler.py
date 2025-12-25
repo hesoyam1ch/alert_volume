@@ -1,8 +1,7 @@
 import datetime
 from typing import List
 
-from settings import UPPER_PERSENTAGE, LOWER_PERSENTAGE
-from src.database.structure import OrderBookVolumesHistoryUsdt
+from src.db.entities.order_book_vol_usdt import OrderBookVolumesHistoryUsdt
 from src.models.order_book_models import OrderBookVolumes, OrderBookUsdt
 from datetime import datetime
 
@@ -64,12 +63,15 @@ class OrderBookHandler:
 
         for i in range(max_len):
             if i < len(bid_array):
-                bp, ba = bid_array[i]
+                bid = bid_array[i]
+                bp, ba = bid[0], bid[1]
                 volumes_bid.append(bp * ba)
 
             if i < len(ask_array):
-                ap, aa = ask_array[i]
+                ask = ask_array[i]
+                ap, aa = ask[0], ask[1]
                 volumes_ask.append(ap * aa)
+
         mid_price = cls.calculate_mid_price(best_bid, best_ask)
 
         bid_avarage_order_is_usdt = cls.calculate_avarage_limit_price(volumes_bid)
@@ -81,8 +83,8 @@ class OrderBookHandler:
             mid_price=mid_price,
             avarage_ask_limit_volume = ask_avarage_order_is_usdt,
             avarage_bid_limit_volume = bid_avarage_order_is_usdt,
-            upper_percent= UPPER_PERSENTAGE,
-            lower_percent = LOWER_PERSENTAGE,
+            upper_percent= 0,
+            lower_percent = 0,
             best_bid=best_bid,
             best_ask=best_ask,
             nonce=ob['nonce']
@@ -97,8 +99,8 @@ class OrderBookHandler:
 
         mid_price = cls.calculate_mid_price(best_bid, best_ask)
 
-        price_upper_level = mid_price * (1 + UPPER_PERSENTAGE / 100)
-        price_lower_level = mid_price * (1 - LOWER_PERSENTAGE / 100)
+        price_upper_level = mid_price * (1 + 0 / 100)
+        price_lower_level = mid_price * (1 - 0 / 100)
 
         volume_asks = cls.calculate_volume_to_price(
             ob['asks'],
@@ -120,8 +122,8 @@ class OrderBookHandler:
             price_lower_level=price_lower_level,
             volume_asks_upper=volume_asks,
             volume_bids_lower=volume_bids,
-            upper_percent= UPPER_PERSENTAGE,
-            lower_percent = LOWER_PERSENTAGE,
+            upper_percent= 0,
+            lower_percent = 0,
             best_bid=best_bid,
             best_ask=best_ask,
             nonce=ob['nonce']

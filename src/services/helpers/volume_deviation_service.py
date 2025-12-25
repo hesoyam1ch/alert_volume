@@ -1,21 +1,19 @@
 import datetime
 from typing import List, Optional
 
-from settings import TRESHOLD_DEVIATION_PROCENTAGE
 from src.models.order_book_models import DeviationType, VolumeDeviation, OrderBookVolumes, OrderBookUsdt, \
     VolumeDeviationUsdt
 from src.services.helpers.order_book_handler import OrderBookHandler
-from src.services.helpers.order_book_service import OrderBookService
 
 
 class VolumeDeviationDetector:
     def __init__(
             self,
             period_minutes: int = 60,
-            threshold_percent: float = 20.0
+            threshold_persentage: float = 20.0
     ):
         self.period_minutes = period_minutes
-        self.threshold_percent = threshold_percent
+        self.threshold_persentage = threshold_persentage
 
 
 
@@ -48,7 +46,7 @@ class VolumeDeviationDetector:
             self,
             current_volumes: OrderBookUsdt,
             historical_data: List
-    ) -> List[VolumeDeviation]:
+    ) -> List[VolumeDeviationUsdt]:
         deviations = []
 
         if len(historical_data) < 5:
@@ -61,10 +59,10 @@ class VolumeDeviationDetector:
         if historical_avarage_limit_volume_bid and historical_avarage_limit_volume_ask > 0:
 
             current_volume_bid_with_percentage = \
-                historical_avarage_limit_volume_bid * (1 + TRESHOLD_DEVIATION_PROCENTAGE / 100)
+                historical_avarage_limit_volume_bid * (1 + self.threshold_persentage / 100)
 
             current_volume_ask_with_percentage = \
-                historical_avarage_limit_volume_ask * (1 + TRESHOLD_DEVIATION_PROCENTAGE / 100)
+                historical_avarage_limit_volume_ask * (1 + self.threshold_persentage / 100)
 
             if current_volumes.avarage_ask_limit_volume > current_volume_ask_with_percentage:
                 deviations.append(VolumeDeviationUsdt(
@@ -72,7 +70,7 @@ class VolumeDeviationDetector:
                     timestamp=current_volumes.timestamp,
                     deviation_type=DeviationType.ASKS_HIGH,
                     current_value=current_volumes.avarage_ask_limit_volume,
-                    threshold_percent=self.threshold_percent
+                    threshold_percent=self.threshold_persentage
                 ))
 
             if current_volumes.avarage_bid_limit_volume > current_volume_bid_with_percentage:
@@ -81,7 +79,7 @@ class VolumeDeviationDetector:
                     timestamp=current_volumes.timestamp,
                     deviation_type=DeviationType.BIDS_HIGH,
                     current_value=current_volumes.avarage_bid_limit_volume,
-                    threshold_percent=self.threshold_percent
+                    threshold_percent=self.threshold_persentage
                 ))
 
         return deviations
@@ -107,7 +105,7 @@ class VolumeDeviationDetector:
                     (current_volumes.volume_asks_upper - avg_asks) / avg_asks * 100
             )
 
-            if asks_deviation_pct > self.threshold_percent:
+            if asks_deviation_pct > self.threshold_persentage:
                 deviations.append(VolumeDeviation(
                     symbol=current_volumes.symbol,
                     timestamp=current_volumes.timestamp,
@@ -115,10 +113,10 @@ class VolumeDeviationDetector:
                     current_value=current_volumes.volume_asks_upper,
                     weighted_avg=avg_asks,
                     deviation_percent=asks_deviation_pct,
-                    threshold_percent=self.threshold_percent
+                    threshold_percent=self.threshold_persentage
                 ))
 
-            elif asks_deviation_pct < -self.threshold_percent:
+            elif asks_deviation_pct < self.threshold_persentage:
                 deviations.append(VolumeDeviation(
                     symbol=current_volumes.symbol,
                     timestamp=current_volumes.timestamp,
@@ -126,7 +124,7 @@ class VolumeDeviationDetector:
                     current_value=current_volumes.volume_asks_upper,
                     weighted_avg=avg_asks,
                     deviation_percent=asks_deviation_pct,
-                    threshold_percent=self.threshold_percent
+                    threshold_percent=self.threshold_persentage
                 ))
 
         avg_bids = self.calculate_weighted_average(
@@ -139,7 +137,7 @@ class VolumeDeviationDetector:
                     (current_volumes.volume_bids_lower - avg_bids) / avg_bids * 100
             )
 
-            if bids_deviation_pct > self.threshold_percent:
+            if bids_deviation_pct > self.threshold_persentage:
                 deviations.append(VolumeDeviation(
                     symbol=current_volumes.symbol,
                     timestamp=current_volumes.timestamp,
@@ -147,10 +145,10 @@ class VolumeDeviationDetector:
                     current_value=current_volumes.volume_bids_lower,
                     weighted_avg=avg_bids,
                     deviation_percent=bids_deviation_pct,
-                    threshold_percent=self.threshold_percent
+                    threshold_percent=self.threshold_persentage
                 ))
 
-            elif bids_deviation_pct < -self.threshold_percent:
+            elif bids_deviation_pct < self.threshold_persentage:
                 deviations.append(VolumeDeviation(
                     symbol=current_volumes.symbol,
                     timestamp=current_volumes.timestamp,
@@ -158,7 +156,7 @@ class VolumeDeviationDetector:
                     current_value=current_volumes.volume_bids_lower,
                     weighted_avg=avg_bids,
                     deviation_percent=bids_deviation_pct,
-                    threshold_percent=self.threshold_percent
+                    threshold_percent=self.threshold_persentage
                 ))
 
         return deviations
