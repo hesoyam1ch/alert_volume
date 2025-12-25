@@ -15,10 +15,9 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
 from src.dialogs import include_dialogs
-from src.middlewares import DbSessionMiddleware
+from src.middlewares.db import DbSessionMiddleware
 from src.handlers import setup_routers
 from config import settings
-# from middlewares.throttling import ThrottlingMiddleware
 
 from redis.asyncio.client import Redis
 
@@ -84,7 +83,6 @@ async def main():
     dp.include_router(routers)
 
     dp.include_routers(*include_dialogs())
-
     setup_dialogs(dp)
 
     try:
@@ -109,6 +107,7 @@ async def main():
 
             await asyncio.Event().wait()
         else:
+            await bot.delete_webhook(drop_pending_updates=True)
             await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
     except Exception as e:
         module_logger.info(f"Failed to startup bot: {e}")

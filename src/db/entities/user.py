@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, BigInteger, String
 
-from .base import Base
-from .mixins import TimestampMixin
+from src.db.base import Base
+from src.models.mixins import TimestampMixin
 
 
 class User(Base, TimestampMixin):

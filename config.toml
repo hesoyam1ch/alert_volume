@@ -9,7 +9,7 @@ POSTGRES_DSN = "@format {env[POSTGRES_DSN]}"
 REDIS_PASSWORD = "@format {env[REDIS_PASSWORD]}"
 
 [development]
-WEBHOOK_DOMAIN = "https://host.ngrok-free.app"
+WEBHOOK_DOMAIN = ""
 REDIS_HOST = "127.0.0.1"
 REDIS_PORT = 6379
 FSM_STORAGE = "memory"

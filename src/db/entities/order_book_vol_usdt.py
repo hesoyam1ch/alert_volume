@@ -1,7 +1,7 @@
-from sqlalchemy import Integer, String, Float
+from sqlalchemy import Integer, String, Float, BigInteger
 from sqlalchemy.orm import Mapped, mapped_column
 
-from .base import Base
+from src.db.base import Base
 
 
 class OrderBookVolumesHistoryUsdt(Base):
@@ -11,4 +11,4 @@ class OrderBookVolumesHistoryUsdt(Base):
     timestamp: Mapped[int] = mapped_column(Integer, nullable=False, index=True)
     avarage_bids_volume: Mapped[float] = mapped_column(Float, nullable=False)
     avarage_ask_volume: Mapped[float] = mapped_column(Float, nullable=False)
-    nonce: Mapped[int] = mapped_column(Integer, nullable=False, unique=True)
+    nonce: Mapped[int] = mapped_column(BigInteger, nullable=False, unique=True)

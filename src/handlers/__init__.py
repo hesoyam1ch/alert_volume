@@ -1,12 +1,12 @@
 from aiogram import Router
 
-from filters.chat_type import ChatTypeFilter
 from . import start
+from .stop_alert import router as stop_alert_router
 
 
 def setup_routers() -> Router:
     router = Router()
-    router.message.filter(ChatTypeFilter(["private"]))
     router.include_router(start.router)
+    router.include_router(stop_alert_router)
 
     return router

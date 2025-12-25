@@ -3,7 +3,7 @@ from typing import Optional
 from sqlalchemy import String, Integer, Float
 from sqlalchemy.orm import Mapped, mapped_column
 
-from .base import Base
+from src.db.base import Base
 
 
 class CoinStats(Base):
